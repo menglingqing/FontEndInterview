@@ -245,6 +245,12 @@ var n1 = 100;
 
    - == 、!=
 
+   ```javascript
+   null == 0;	// false
+   undefined == null;	// true
+   undefined == 0;	// false
+   ```
+
 
 ### 3. 运算符
 
