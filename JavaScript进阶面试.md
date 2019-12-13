@@ -217,3 +217,139 @@ m.__proto__ === MathHandle.prototype	// true
 // 形式上强行模仿 java C#，却失去了它的本性和个性
 ```
 
+继承
+
+```javascript
+// animal
+function Animal(){
+  this.eat = function () {
+    console.log('animal eat')
+  }
+}
+
+// dog
+function Dog(){
+  this.bark = function(){
+    console.log('dog bark')
+  }
+}
+
+Dog.prototype = new Animal()
+
+// 哈士奇
+var hashiqi = new Dog()
+```
+
+```javascript
+class Animal{
+  constructor(name){
+    this.name = name;
+  }
+  eat(){
+    console.log(`${this.name} eat`)
+  }
+}
+
+class Dog extends Animal{
+  constructor(name){
+    super(name);
+    this.name = name;
+  }
+  say(){
+    console.log(`${this.name} say`)
+  }
+}
+
+const dog = new Dog("哈士奇")
+dog.eat();
+dog.say();
+```
+
+问题解答
+
+- Class 在语法上更加贴合面向对象的写法
+- Class 实现继承更加易读、易理解
+- 更易于写Java等后端语言等使用
+- 本质还是语法糖，使用 prototype
+
+
+
+## 3. Promise 的基本使用
+
+- Callback Hell
+- Promise语法
+
+```javascript
+const promise = new Promise((resolve, reject)=>{
+  resolve()
+  // reject()
+})
+
+promise.then(res=>{}, rej=>{})
+```
+
+问题解答
+
+
+
+## 4. ES6 常用功能
+
+- let const
+- 多行字符串/模版变量
+- 解构赋值
+- 块级作用域
+- 函数默认参数
+- 箭头函数
+
+
+
+## 5. 原型
+
+- 说一个原型的实际应用
+  - 描述一下jquery如何使用原型
+  - 描述一下zepto如何使用原型
+  - 结合一下自己的项目
+- 原型如何体现它的扩展性
+  - 说一下jquery和zepto的插件机制
+  - 结合自己的开发经验，做过的基于原型的插件
+
+## 6. 异步
+
+- 什么是单线程，和异步有什么关系
+- 什么是event-loop
+- 是否用过jquery的deferred
+- Promise 的基本使用和原理
+- 介绍一下async/await （和Promise的区别、联系）
+- 总结一下当前JS解决异步的方案
+
+JS单线程的原因 - 避免DOM渲染冲突
+
+- 浏览器需要渲染 DOM
+- JS 可以修改 DOM 结构
+- JS 执行的时候，浏览器 DOM 渲染会暂停
+- 两段 JS 也不能同时执行（都修改 DOM 就冲突了）
+- webworker 支持多线程，但是不能访问 DOM
+
+问题解答：
+
+- 单线程就是同时只做一件事，两段JS不能同时执行
+- 原因就是为了避免 DOM 渲染的冲突
+
+
+
+什么是event-loop
+
+- 事件轮询， JS实现异步的具体解决方案
+- 同步代码，直接执行
+- 异步函数先放在 异步队列 中
+- 待同步函数执行完毕，轮询执行 异步队列 中的函数
+
+
+
+使用jquery的Deferred
+
+- 无法改变JS异步和单线程的本质
+- 只能从写法上杜绝 callback 这种形式
+- 它是一种语法糖形式，但是解藕了代码
+- 很好的体现：开放封闭原则
+
