@@ -307,9 +307,39 @@ for(var i = 0; i < 10; i++)
 // 在循环中使用时，当执行到break的时候，会终止循环
 ```
 
-### 5. 函数的预解析
+### 5. 函数
 
-预解析（预解释）
+#### 声明
+
+函数声明（声明式函数）
+
+函数表达式（命名式）
+
+#### 形参、实参
+
+函数的参数和`arguments`存在映射机制
+
+```javascript
+function test(a, b){
+  a = 3;
+  console.log(arguments[0])
+}
+test(1, 2)	// 3
+```
+
+但是这种映射机制是在函数运行的一瞬间建立
+
+```javascript
+function test(a, b){
+  b = 4;
+  console.log(arguments[1])
+}
+test(1)	// undefined
+```
+
+
+
+#### 预解析（预解释）
 
 - 就是在代码执行之前，对代码进行通读，把一些东西提前解析出来
 
