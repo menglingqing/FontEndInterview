@@ -2,32 +2,75 @@
 
 ## 1. 简介
 
-JavaScript	轻量级弱类型脚本语言
+### Web发展史（了解）
 
-​	脚本语言： 不能自己独立运行，需要依赖别的语言
+英语+互联网+金融（政治是目的，金融是手段）金融就是加杠杆，金融最厉害的玩法是最低成本，末端是期货、股票。最低成本为王。股票的震源来自外汇，高明玩法是国债。金融是实现暴富的手段，技术是生存的根本。
 
-js 依赖的就是html
+### 浏览器的组成
 
-- html 超文本标记语言（基础语言）
+- `Shell`部分
+- 内核部分
+  - 渲染引擎（语法规则和渲染）
+  - `js`引擎
+  - 其他模块
 
-- css 层叠样式表（不是语言）
+主流浏览器
 
-- js 脚本语言
+| 主流浏览器 | 内核             |
+| ---------- | ---------------- |
+| IE         | `trident`        |
+| Chrome     | `webkit`/`blink` |
+| firefox    | `Gecko`          |
+| Opera      | `presto`         |
+| Safari     | `webkit`         |
 
-js 是在做什么
+### JavaScript	轻量级弱类型脚本语言
+
+- 脚本语言（解释性语言）： 不能自己独立运行，需要依赖别的语言
+- 单线程
+  - 执行队列：轮转时间片
+
+`js` 依赖的是`html`
+
+- `html` 超文本标记语言（基础语言）
+
+- `css` 层叠样式表（不是语言）
+
+- `js` 脚本语言
+
+`js` 是在做什么
 
 - 通过我们的语法，来控制页面上标签（DOM）出现一些变化
 - 通过我们的语法，来控制浏览器发生一些变化
 
-js 的三大核心
+`js` 的三大核心
 
-- ECMAScript（表示我们的语法）
-- DOM
-  - 拥有一套成熟的API，用来操作页面中的标签
-- BOM
-  - 拥有一套成熟的API，用来操作浏览器的
+- `ECMAScript`（表示我们的语法）
+- `DOM`
+  - 拥有一套成熟的`API`，用来操作页面中的标签
+- `BOM`
+  - 拥有一套成熟的`API`，用来操作浏览器的
+
+JavaScript如何引用
+
+```html
+<body>
+    <script>
+    	// 第一种引入方法 内部嵌入
+	</script>
+    
+    <!-- 第二种引入方式 引入外部文件 -->
+    <script src="./index"></script>
+</body>
+```
+
+
 
 ## 2.基本语法
+
+语句后面要用分号结束
+
+`js`语法错误会引发后续代码终止，但不会影响其他`js`代码块
 
 ### 1. 变量
 
@@ -58,6 +101,11 @@ var n1 = 100;
 - 驼峰命名法
 - 不要使用中文或拼音
 
+内存
+
+- 栈内存 `stack`
+- 堆内存 `heap`
+
 ### 2. 数据类型
 
 - 基本数据类型
@@ -67,17 +115,17 @@ var n1 = 100;
 
 1. 基本数据类型
    - 数值 Number
-     - NaN
-   - 字符串 String
-   - 布尔值 Boolean
-   - 空对象指针 Null
-   - 未定义数据类型 undefined
+     - `NaN`
+   - 字符串`String`
+   - 布尔值 `Boolean`
+   - 空对象指针 `Null`
+   - 未定义数据类型 `undefined`
 
 2. 引用数据类型
 
    - 数组[]
    - 对象 {}
-   - 函数 Function
+   - 函数 `Function`
    - ...
 
 3. 判断数据类型
@@ -87,35 +135,67 @@ var n1 = 100;
      ```javascript
      // typeof 待检测的变量
      // typeof(待检测的变量)
+     typeof {}	// "object"
+     typeof []	// "object"
+     typeof null	// "object"
      ```
 
-     typeof 关键字的返回值是待检测变量的数据类型，且该条返回值的数据类型是 字符串String
+     `typeof` 能返回的数据类型有：number string boolean object undefined function
 
-   - isNaN
+     `typeof` 关键字的返回值是待检测变量的数据类型，且该条返回值的数据类型是 字符串String
 
-     检测数据是不是一个数字
+   - `isNaN`
+
+     检测数据是不是一个非有效数字
+
+     1. 先进行隐式调用 `Number()`
+     2. 执行`isNaN()`
+
+     ```javascript
+     isNaN("abc")	// true
+     isNaN(null)		// false
+     isNaN(undefined)	// true
+     ```
 
 4. 数据类型转换
 
    转换成数字类型
 
-   - Number（要转换的内容）只认完整的数据，可进行数据类型转换，但不认'100a'这样的数据
+   - `Number（要转换的内容）`只认完整的数据，可进行数据类型转换，但不认'100a'这样的数据
 
      ==把这个数据当做一个整体来看==
 
-     转换成功，返回一个数值；不成功，返回NaN
+     尽可能地转换成数字
 
-   - parseInt（要转换的内容）只识整数，不认数据类型转换
+     转换成功，返回一个数值；不成功，返回`NaN`
+
+     ```javascript
+     Number(false)	// 0
+     Number(undefined)	// NaN
+     Number("a")	// NaN
+     Number("123")	// 123
+     Number("-123")	// -123
+     Number("-123abc")	// NaN
+     ```
+
+   - `parseInt（要转换的内容）`只识整数，不认数据类型转换
 
      ==把这个数据当做一个文本来看，从左到右一位一位的看==
 
-     转换的过程中，会把整个数据当做一个完整的文本来看待，能转换的都转换，遇到转换不了的就直接停止，把之前转换的结果返回
+     只认识数，不认识true、false、null、undefined
 
      如果第一个位置就不能转换，那么直接返回NaN
 
      不认识小数点，只能解析整数
 
-   - parseFloat（要转换的内容）
+     ```javascript
+     parseInt(true)	// NaN
+     parseInt(false)	// NaN
+     parseInt(null)	// NaN
+     parseInt(undefined)	// NaN
+     ```
+
+   - `parseFloat（要转换的内容）`
 
      ==把这个数据当做一个文本来看，从左到右一位一位的看==
 
@@ -123,11 +203,13 @@ var n1 = 100;
 
    转换成字符串类型
 
-   - String()
+   - `String()`
 
-   - 数据.toString()
+   - 数据`.toString()`
 
-   - +运算
+     `undefined` 和 `null` 不能用`.toString()`
+
+   - `+`运算
 
      只要+有一边的数据是字符串类型，就会进行字符串拼接
 
@@ -135,11 +217,34 @@ var n1 = 100;
 
    转换成布尔类型
 
-   - Boolean()
+   - `Boolean()`
 
-     在js中只有以下五种数据能转换成false，其余都是true
+     在`js`中只有以下五种数据能转换成false，其余都是true
 
-     0，''，NaN，undefined，null 这五个是false
+     `0`，`''`，`NaN`，`undefined`，`null` 这五个是false
+
+   隐式数据类型转换
+
+   - `isNaN()`
+
+   - ++、 --、 +、 - （一元正负）
+
+     ```javascript
+     var a = 1;
+     +a;
+     -a;
+     ```
+
+   - +
+
+   - -、*、/、%
+
+   - &&、||
+
+   - <、>、<=、>=
+
+   - == 、!=
+
 
 ### 3. 运算符
 
@@ -150,6 +255,12 @@ var n1 = 100;
 ```javascript
 // 前置++ 先运算后赋值
 // ++后置 先赋值后运算
+var a = 10;
+var b = ++a - 1 + a++;
+console.log(b)
+
+// result =>
+// 21
 ```
 
 ```javascript
@@ -159,6 +270,13 @@ var n1 = 100;
 ```javascript
 // 三元运算符 ()?():()
 ```
+
+```javascript
+// + 数学运算/字符串拼接
+// - * / %
+```
+
+
 
 ### 4. 条件分支&循环结构
 
@@ -212,4 +330,11 @@ fn()
 预解析后，在声明变量前，还能使用函数名来执行函数；
 
 在声明变量后，就不能执行函数了
+
+
+
+### 6. 编程形式
+
+- 面向过程
+- 面向对象
 
