@@ -472,11 +472,19 @@ console.log(father.fortune.card2)	// "master"
 
 绝大多数对象的最终都会继承自`Object.prototype`
 
+```javascript
+Object.create(null)
+
+// [Object: null prototype] {}
+```
+
+
+
 `Object.create（原型）`
 
 ```javascript
 var obj = {name: 'mlq', age: 18}
-var obj1 = Object.create(obj)
+var obj1 = Object.create(obj)	// 指定一个原型，只能放对象（引用类型数据），null或undefined类型
 
 console.log(obj1.__proto__)	// {name: 'mlq", age 18}
 ```
