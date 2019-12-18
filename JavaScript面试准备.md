@@ -374,3 +374,112 @@ fn()
 - 面向过程
 - 面向对象
 
+### 7. 原型
+
+#### 定义
+
+​	原型是function对象的一个属性，它定义了构造函数制造出的对象的公共祖先。通过该构造函数产生的对象，可以继承该原型的属性和方法。原型也是对象。
+
+利用原型的特点和概念，可以提取共有属性。
+
+```javascript
+function Car(){}
+Car.prototype = {
+    lang: 4900,
+    height: 5200
+}
+Car.prototype.name = "BMW"
+var car = new Car();
+
+console.log(car.name)	// "BMW"
+console.log(car.lang)	// 4900
+console.log(car.height)	// 5200
+```
+
+`prototype.key = value` 和 `prototype = {}` 的区别
+
+```javascript
+Person.prototype.name = "sunny";
+function Person(){};
+var person = new Person();
+Person.prototype = {
+    name: 'cherry'
+}
+
+console.log(person.name)	// "sunny"
+```
+
+```javascript
+Person.prototype.name = "sunny";
+function Person(){};
+var person = new Person();
+Person.prototype.name = "cherry";
+
+console.log(person.name)	// "cherry"
+```
+
+```javascript
+Person.prototype.name = "sunny";
+function Person(){};
+
+Person.prototype = {
+    name: 'cherry'
+}
+var person = new Person();
+
+console.log(person.name)	// "sunny"
+```
+
+
+
+对象如何查看原型 --> 隐式属性`__proto__`
+
+```javascript
+// 对象的__proto__属性指向该对象的原型
+// car.__proto__ => Car.prototype
+```
+
+
+
+对象如何查看对象的构造函数 -->  `constructor`
+
+#### 原型链
+
+如何构成原型链
+
+原型链上属性的增删改查
+
+```javascript
+// 如果原型上的某个属性是引用值，那么子代可以通过这样的方式修改父代的属性
+function Father(){
+    this.fortune = {
+        card1: "visa"
+    }
+}
+
+var father = new Father();
+function Son(){
+
+}
+Son.prototype = father;
+var son = new Son()
+son.fortune.card2 = 'master'
+
+console.log(father.fortune.card2)	// "master"
+```
+
+
+
+绝大多数对象的最终都会继承自`Object.prototype`
+
+`Object.create（原型）`
+
+```javascript
+var obj = {name: 'mlq', age: 18}
+var obj1 = Object.create(obj)
+
+console.log(obj1.__proto__)	// {name: 'mlq", age 18}
+```
+
+
+
