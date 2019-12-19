@@ -130,7 +130,7 @@ var n1 = 100;
 
 3. 判断数据类型
 
-   - typeof 关键字进行判断
+   - `typeof` 关键字进行判断
 
      ```javascript
      // typeof 待检测的变量
@@ -140,7 +140,7 @@ var n1 = 100;
      typeof null	// "object"
      ```
 
-     `typeof` 能返回的数据类型有：number string boolean object undefined function
+     `typeof` 能返回的数据类型有（6种）：number string boolean object undefined function
 
      `typeof` 关键字的返回值是待检测变量的数据类型，且该条返回值的数据类型是 字符串String
 
@@ -155,6 +155,24 @@ var n1 = 100;
      isNaN("abc")	// true
      isNaN(null)		// false
      isNaN(undefined)	// true
+     ```
+
+   - `instanceof`
+
+     根据原型链向上查找，如果能找到返回`true`，否则返回`false`
+
+     ```javascript
+     // A instanceof B
+     // A对象 是不是 B构造函数构造出来的
+     // 看A对象的原型链上 有没有 B的原型
+     ```
+
+   - `Object.prototype.toString.call()`
+
+     ```javascript
+     console.log(Object.prototype.toString.call([]))		// [object Array]
+     console.log(Object.prototype.toString.call(123))	// [object Number]
+     console.log(Object.prototype.toString.call({}))		// [object Object]
      ```
 
 4. 数据类型转换
@@ -341,11 +359,18 @@ test(1)	// undefined
 
 #### 预解析（预解释）
 
+##### 四部曲
+
+1. 创建`AO`对象
+2. 找形参和变量声明，将变量和形参名作为`AO`属性名，值为`undefined`
+3. 将实参值和形参统一
+4. 在函数体里面找函数声明，值赋予函数体
+
 - 就是在代码执行之前，对代码进行通读，把一些东西提前解析出来
 
 解析（一共解析两点）：
 
-- 声明式函数 function fn() {}：声明一个变量，并将函数地址赋值给这个变量
+- 声明式函数 `function fn() {}`：声明一个变量，并将函数地址赋值给这个变量
 - var 声明：只声明一个变量，并不赋值
 
 问题：如果声明一个变量和函数，变量名和函数名一样会怎么样？
@@ -367,7 +392,10 @@ fn()
 
 在声明变量后，就不能执行函数了
 
+#### 作用域
 
+- 运行期上下文： 当函数执行时，会创建一个称为==执行期上下文==的内部环境。一个执行期上下文定义了一个函数执行时的环境，函数每次执行时对应的执行上下文都是独一无二的，所以多次调用一个函数会导致创建多个执行上下文，当函数执行完毕，它所产生的执行上下文被销毁
+- 查找变量：从作用域链的顶端依次向下查找
 
 ### 6. 编程形式
 
@@ -491,3 +519,114 @@ console.log(obj1.__proto__)	// {name: 'mlq", age 18}
 
 
 
+#### `call()` 和 `apply()`
+
+`call()`的应用
+
+```javascript
+function Person(name, age){
+    this.name = name;
+    this.age = age;
+}
+function Student(name, age, tel){
+    Person.call(this, name, age)
+    this.tel = tel
+}
+
+var student = new Student("mlq", 18, 5522)
+
+console.log(student)	// Student { name: 'mlq', age: 18, tel: 5522 }
+```
+
+`call()`和 `apply()`都是改变`this`指向的，区别是传入参数不同
+
+`call()`需要把实参按照形参的个数传进去
+
+`apply()`需要传一个`arguments`
+
+
+
+#### this
+
+1. 函数预编译过程	`this` --> `window`
+2. 全局作用域里		`this` --> `window`
+3. `call()` 和 `apply()` 可以改变函数运行时 `this` 指向
+4. `obj.func()`；`func()`里面的`this`指向`obj`
+
+
+
+#### 继承
+
+1. 传统形式-->原型链
+
+   过多的继承了没用的属性
+
+2. 借用构造函数
+
+   不能继承借用构造函数的原型
+
+   每次构造函数都要多走一个函数
+
+3. 共享原型
+
+   不能随便改动自己的原型
+
+4. 圣杯模式
+
+   ```javascript
+   function Father(){}
+   function Son(){}
+   function inherit(Target, Origin){
+       function F(){}
+       F.prototype = Origin.prototype;
+       Target.prototype = new F();
+   }
+   inherit(Son, Father)
+   Father.prototype.name = "mlq"
+   var son = new Son()
+   console.log(son.name)
+   
+   // Yahoo实现
+   var inherit = (function () {
+       var F = function(){}
+       return function(Target, Origin){
+           F.prototype = Origin.prototype;
+           Target.prototype = new F();
+           Target.prototype.constructor = Target;
+           Target.prototype.uper = Origin.prototype;	// uper => super
+       }
+   }())
+   ```
+
+
+
+#### new关键字
+
+```javascript
+function test(c){
+    // var this = Object.create(test.prototype)
+    var a = 123;
+    function b(){}
+}
+new test();
+
+test(1)	// AO {
+//			arguments: [1],
+//			this: window,
+//			c: 1,
+//			a: undefined,
+//			b: function(){}
+//		}
+```
+
+
+
+### 闭包
+
+#### 作用
+
+- 实现公有变量
+  - 函数累加器
+- 可以做缓存 （存储结构）
+- 可以实现封装，属性私有化
+- 模块化开发，防止污染全局变量
