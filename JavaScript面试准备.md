@@ -114,7 +114,7 @@ var n1 = 100;
 - 数据类型转换
 
 1. 基本数据类型
-   - 数值 Number
+   - 数值 `Number`
      - `NaN`
    - 字符串`String`
    - 布尔值 `Boolean`
@@ -123,9 +123,34 @@ var n1 = 100;
 
 2. 引用数据类型
 
-   - 数组[]
-   - 对象 {}
+   - 数组`[]`
+
+     - 类数组
+
+       1. 可以利用属性名模拟数组的特性
+       2. 可以动态的增加`length`属性
+       3. 如果强行让类数组调用`push`方法，则会根据`length`属性值的位置进行属性的扩充
+
+       属性要为索引（数字）属性，必须要有`length`属性，最好加上`push`
+
+       ```javascript
+       var obj = {
+           "2": "a",
+           "3": "b",
+           "length": 2,
+           "push": Array.prototype.push
+       }
+       obj.push('c')
+       obj.push('d')
+       
+       console.log(obj)
+       // { '2': 'c', '3': 'd', length: 4, push: [Function: push] }
+       ```
+
+   - 对象 `{}`
+
    - 函数 `Function`
+
    - ...
 
 3. 判断数据类型
@@ -173,6 +198,29 @@ var n1 = 100;
      console.log(Object.prototype.toString.call([]))		// [object Array]
      console.log(Object.prototype.toString.call(123))	// [object Number]
      console.log(Object.prototype.toString.call({}))		// [object Object]
+     ```
+
+   - 自己封装的类型判断方法`myType`
+
+     ```javascript
+     function myType(target){
+         var template = {
+             "[object Array]": "array",
+             "[object Object]": "object",
+             "[object Number]": "number-object",
+             "[object String]": "string-object",
+             "[object Boolean]": "boolean-object"
+         }
+         
+         if(target === null){
+             return "null"
+         }else if(typeof(target) == "object"){
+             var str = Object.prototype.toString.call(target)
+             return template[str]
+         }else{
+             return typeof(target)
+         }
+     }
      ```
 
 4. 数据类型转换
@@ -357,7 +405,7 @@ test(1)	// undefined
 
 
 
-#### 预解析（预解释）
+#### 预编译（预解释）
 
 ##### 四部曲
 
@@ -598,6 +646,26 @@ console.log(student)	// Student { name: 'mlq', age: 18, tel: 5522 }
    }())
    ```
 
+5. 继承公有属性
+
+   ```javascript
+   // 1) Object.setPrototypeOf(Child.prototype, Parent.prototype)
+   // Child.prototype.__proto__ = Parent.prototype
+   // 2) Child.prototype = Object.create(Parent.prototype)
+   ```
+
+6. 继承私有属性
+
+   ```javascript
+   // Parent.call(this)
+   class Child extends Parent{
+       constructor(){
+           super()	// Parent.call(this)
+       }
+   }
+   ```
+
+
 
 
 #### new关键字
@@ -630,3 +698,20 @@ test(1)	// AO {
 - 可以做缓存 （存储结构）
 - 可以实现封装，属性私有化
 - 模块化开发，防止污染全局变量
+
+
+
+#### 高级单例模式
+
+```javascript
+var nameSpace = (function () {
+    var n = 12;
+    function fn(){
+        // ...
+    }
+    return {
+        fn: fn
+    }
+})()
+```
+
